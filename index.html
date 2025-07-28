@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holeta Children’s Profile App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <section class="hero-section">
+    <nav class="navbar">
+      <button class="hamburger-menu" id="hamburgerMenu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+      <ul id="navLinks">
+        <li><h1>Holeta Children’s Profile</h1></li>
+        <li><a href="index.html#home" class="nav-link">Home</a></li>
+        <li><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="register.html" class="nav-link">Register</a></li>
+        <li><a href="child_list.html" class="nav-link">Registered Children</a></li>
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+      </ul>
+    </nav>
+    <div class="container">
+      <h2 class="hero-title">Welcome to Holeta Town Women and Children Office<br>and Endalewgeta Children’s Village</h2>
+      <p class="hero-subtitle">Empowering every child through data-driven care and community collaboration.</p>
+    </div>
+  </section>
+  <main>
+    <section id="gallery" class="gallery-section">
+      <div class="container">
+        <h2 class="gallery-title">Gallery</h2>
+        <div class="gallery-grid">
+          <img src="img/1.jpg" alt="Gallery Photo 1" class="gallery-img" data-index="1">
+          <img src="img/2.jpg" alt="Gallery Photo 2" class="gallery-img" data-index="2">
+          <img src="img/3.jpg" alt="Gallery Photo 3" class="gallery-img" data-index="3">
+          <img src="img/4.jpg" alt="Gallery Photo 4" class="gallery-img" data-index="4">
+          <img src="img/5.jpg" alt="Gallery Photo 5" class="gallery-img" data-index="5">
+          <img src="img/6.jpg" alt="Gallery Photo 6" class="gallery-img" data-index="6">
+          <img src="img/7.jpg" alt="Gallery Photo 7" class="gallery-img" data-index="7">
+          <img src="img/8.jpg" alt="Gallery Photo 8" class="gallery-img" data-index="8">
+          <img src="img/9.jpg" alt="Gallery Photo 9" class="gallery-img" data-index="9">
+          <img src="img/10.jpg" alt="Gallery Photo 10" class="gallery-img" data-index="10">
+          <img src="img/11.jpg" alt="Gallery Photo 11" class="gallery-img" data-index="11">
+          <img src="img/12.jpg" alt="Gallery Photo 12" class="gallery-img" data-index="12">
+          <img src="img/13.jpg" alt="Gallery Photo 13" class="gallery-img" data-index="13">
+          <img src="img/14.jpg" alt="Gallery Photo 14" class="gallery-img" data-index="14">
+          <img src="img/15.jpg" alt="Gallery Photo 15" class="gallery-img" data-index="15">
+          <img src="img/16.jpg" alt="Gallery Photo 16" class="gallery-img" data-index="16">
+        </div>
+        <!-- Lightbox Modal -->
+        <div id="lightboxModal" class="lightbox-modal">
+          <span class="lightbox-close" id="lightboxClose">&times;</span>
+          <img class="lightbox-content" id="lightboxImg" src="" alt="Gallery Large View">
+          <span class="lightbox-prev" id="lightboxPrev">&#10094;</span>
+          <span class="lightbox-next" id="lightboxNext">&#10095;</span>
+        </div>
+      </div>
+    </section>
+    <!-- Registration form section removed for separate page -->
+    <section id="about" class="about-section">
+      <div class="container">
+        <h2>About Holeta</h2>
+        <p>
+          Holeta is a vibrant town dedicated to the well-being and development of its children. This app, in collaboration with the Women and Children Office and Endalewgeta Children’s Village, aims to improve data collection, accessibility, and analysis for more effective interventions and resource allocation. Join us in making a difference for every child in Holeta!
+        </p>
+      </div>
+    </section>
+    <!-- Register and Registered Children sections will be added later -->
+  </main>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Gallery Lightbox functionality
+  const galleryImages = document.querySelectorAll('.gallery-img');
+  const lightboxModal = document.getElementById('lightboxModal');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  let currentImgIndex = 1;
+
+  if (galleryImages.length > 0) {
+    function showLightbox(index) {
+      currentImgIndex = index;
+      lightboxImg.src = `img/${index}.jpg`;
+      lightboxModal.style.display = 'flex';
+    }
+
+    galleryImages.forEach(img => {
+      img.addEventListener('click', () => {
+        const index = parseInt(img.getAttribute('data-index'));
+        showLightbox(index);
+      });
+    });
+
+    function closeLightbox() {
+      lightboxModal.style.display = 'none';
+    }
+
+    function showPrevImg() {
+      currentImgIndex = currentImgIndex === 1 ? 16 : currentImgIndex - 1;
+      showLightbox(currentImgIndex);
+    }
+
+    function showNextImg() {
+      currentImgIndex = currentImgIndex === 16 ? 1 : currentImgIndex + 1;
+      showLightbox(currentImgIndex);
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', showPrevImg);
+    lightboxNext.addEventListener('click', showNextImg);
+
+    lightboxModal.addEventListener('click', function(e) {
+      if (e.target === lightboxModal) closeLightbox();
+    });
+
+    window.addEventListener('keydown', function(e) {
+      if (lightboxModal.style.display === 'flex') {
+        if (e.key === 'ArrowLeft') showPrevImg();
+        if (e.key === 'ArrowRight') showNextImg();
+        if (e.key === 'Escape') closeLightbox();
+      }
+    });
+  }
+
+  // Hamburger menu functionality
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  const navLinksList = document.getElementById('navLinks');
+  const allNavLinks = document.querySelectorAll('#navLinks .nav-link');
+
+  if (hamburgerMenu) {
+    hamburgerMenu.addEventListener('click', () => {
+      navLinksList.classList.toggle('active');
+      hamburgerMenu.classList.toggle('active');
+    });
+  }
+
+  // Close menu when a link is clicked on mobile
+  if (allNavLinks.length > 0) {
+    allNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (hamburgerMenu.classList.contains('active')) {
+          navLinksList.classList.remove('active');
+          hamburgerMenu.classList.remove('active');
+        }
+      });
+    });
+  }
+});
+</script>
+</body>
+</html>

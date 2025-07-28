@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registered Children | Holeta Children’s Profile App</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 14px;
+    }
+    th {
+      background-color: #4a90e2;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .container {
+      max-width: 95%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .no-data {
+      margin-top: 30px;
+      color: gray;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="container">
+      <nav class="navbar">
+        <button class="hamburger-menu" id="hamburgerMenu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <ul id="navLinks">
+          <li><h1>Holeta Children’s Profile</h1></li>
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="register.html" class="nav-link">Register</a></li>
+          <li><a href="child_list.html" class="nav-link active">Registered Children</a></li>
+          <li><a href="index.html#about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2 class="hero-title">📋 Registered Children</h2>
+    <div id="childListContainer">
+      <table id="childTable" style="display: none;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Full Name</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Disability</th>
+            <th>Guardian</th>
+            <th>Contact</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody id="childTableBody"></tbody>
+      </table>
+      <div id="noDataMessage" class="no-data">No children registered yet.</div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const children = JSON.parse(localStorage.getItem("children")) || [];
+      const table = document.getElementById("childTable");
+      const tbody = document.getElementById("childTableBody");
+      const noDataMsg = document.getElementById("noDataMessage");
+
+      if (children.length > 0) {
+        table.style.display = "table";
+        noDataMsg.style.display = "none";
+
+        children.forEach((child, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${child.firstName} ${child.fatherName}</td>
+            <td>${child.dob}</td>
+            <td>${child.gender}</td>
+            <td>${child.disability}</td>
+            <td>${child.guardian}</td>
+            <td>${child.contact}</td>
+            <td>${child.address}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } else {
+        table.style.display = "none";
+        noDataMsg.style.display = "block";
+      }
+
+      // Hamburger menu support (optional, from register page)
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const navLinksList = document.getElementById('navLinks');
+      const allNavLinks = document.querySelectorAll('#navLinks .nav-link');
+
+      if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', () => {
+          navLinksList.classList.toggle('active');
+          hamburgerMenu.classList.toggle('active');
+        });
+      }
+
+      if (allNavLinks.length > 0) {
+        allNavLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            if (hamburgerMenu.classList.contains('active')) {
+              navLinksList.classList.remove('active');
+              hamburgerMenu.classList.remove('active');
+            }
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

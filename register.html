@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register a Child | Holeta Children’s Profile App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="main-header">
+    <div class="container">
+      <nav class="navbar">
+        <button class="hamburger-menu" id="hamburgerMenu">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <ul id="navLinks">
+          <li><h1>Holeta Children’s Profile</h1></li>
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li><a href="index.html#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="register.html" class="nav-link active">Register</a></li>
+          <li><a href="child_list.html" class="nav-link">Registered Children</a></li>
+          <li><a href="index.html#about" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="register-section">
+      <div class="container">
+        <h2>Register a Child</h2>
+        <form id="registrationForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="childFirstName">Child's First Name</label>
+              <input type="text" id="childFirstName" name="childFirstName" required pattern="[A-Za-z ]+">
+            </div>
+            <div class="form-group">
+              <label for="fatherName">Father's Name</label>
+              <input type="text" id="fatherName" name="fatherName" required pattern="[A-Za-z ]+">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="">Select</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="disability">Disability</label>
+            <select id="disability" name="disability" required>
+              <option value="">Select</option>
+              <option value="None">None</option>
+              <option value="Visual">Visual</option>
+              <option value="Hearing">Hearing</option>
+              <option value="Physical">Physical</option>
+              <option value="Intellectual">Intellectual</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="guardianName">Guardian's Name</label>
+            <input type="text" id="guardianName" name="guardianName" required pattern="[A-Za-z ]+">
+          </div>
+          <div class="form-group">
+            <label for="contact">Contact Number</label>
+            <input type="tel" id="contact" name="contact" required pattern="[0-9]{10,15}">
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" required>
+          </div>
+          <button type="submit" class="submit-btn">Register</button>
+        </form>
+        <div id="successModal" class="success-modal" style="display:none;">
+          <div class="success-modal-content">
+            <span class="success-icon">✔️</span>
+            <div class="success-modal-text">Registration successful!</div>
+            <button id="successContinueBtn" class="success-continue-btn">Continue</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const registrationForm = document.getElementById('registrationForm');
+      const successModal = document.getElementById('successModal');
+      const successContinueBtn = document.getElementById('successContinueBtn');
+    
+      registrationForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+    
+        const nameFields = [
+          { id: 'childFirstName', label: "Child's First Name" },
+          { id: 'fatherName', label: "Father's Name" },
+          { id: 'guardianName', label: "Guardian's Name" }
+        ];
+        for (const field of nameFields) {
+          const value = document.getElementById(field.id).value.trim();
+          if (!/^[A-Za-z ]+$/.test(value)) {
+            alert(field.label + ' should only contain letters and spaces.');
+            return;
+          }
+        }
+    
+        const contact = document.getElementById('contact').value.trim();
+        if (!/^[0-9]{10,15}$/.test(contact)) {
+          alert('Contact Number should only contain 10 to 15 digits.');
+          return;
+        }
+    
+        // Collect child data from form
+        const childData = {
+          firstName: document.getElementById('childFirstName').value.trim(),
+          fatherName: document.getElementById('fatherName').value.trim(),
+          dob: document.getElementById('dob').value,
+          gender: document.getElementById('gender').value,
+          disability: document.getElementById('disability').value,
+          guardian: document.getElementById('guardianName').value.trim(),
+          contact: contact,
+          address: document.getElementById('address').value.trim()
+        };
+    
+        // Save to localStorage
+        let children = JSON.parse(localStorage.getItem('children')) || [];
+        children.push(childData);
+        localStorage.setItem('children', JSON.stringify(children));
+    
+        // Show success modal
+        registrationForm.reset();
+        successModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      });
+    
+      successContinueBtn.addEventListener('click', function() {
+        successModal.style.display = 'none';
+        document.body.style.overflow = '';
+      });
+    
+      // Hamburger menu
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const navLinksList = document.getElementById('navLinks');
+      const allNavLinks = document.querySelectorAll('#navLinks .nav-link');
+    
+      if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', () => {
+          navLinksList.classList.toggle('active');
+          hamburgerMenu.classList.toggle('active');
+        });
+      }
+    
+      if (allNavLinks.length > 0) {
+        allNavLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            if (hamburgerMenu.classList.contains('active')) {
+              navLinksList.classList.remove('active');
+              hamburgerMenu.classList.remove('active');
+            }
+          });
+        });
+      }
+    });
+    </script>
+    
+</body>
+</html> 
